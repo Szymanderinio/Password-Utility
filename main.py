@@ -3,15 +3,14 @@
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 import random
-from string import punctuation
+import re
 
 colors = {"black": "\033[0;37;40m", "white": "\033[0;37;47m",
-          "yellow_txt": "\033[0;33;40m", "white_txt": "\033[1;37;40m", "red_txt_black_bgr": "\033[1;31;40m",
+          "yellow_txt": "\033[0;33;40m", "white_txt": "\033[0;37;40m",
+          "white_txt_bold": "\033[1;37;40m", "red_txt_black_bgr": "\033[1;31;40m",
           "red_txt_white_bgr": "\033[1;31;47m", "blue_txt_black_bgr": "\033[1;36;40m",
           "blue_txt_white_bgr": "\033[1;36;47m", "green_txt": "\033[1;32;40m"}
 
-
-# sp_char_id = {}
 
 def show_menu():
     print("Choose an {}option{} from below: ".format
@@ -26,7 +25,28 @@ def show_menu():
 
 
 def password_strongmeter():
-    print("tu cos bedzie")
+    password_to_check = str(input("Type your password below:\n"))
+    strong_meter = 0
+    answer = ""
+    if len(password_to_check) in range(4,11):
+        strong_meter = strong_meter + 1
+    if bool(re.search("[a-z]", password_to_check)) and bool(re.search("[A-Z]", password_to_check)):
+        strong_meter = strong_meter + 1
+    if bool(re.search("[0-9]", password_to_check)):
+        strong_meter = strong_meter + 1
+    if bool(re.search("[!@#$%^&*()_{}+-]", password_to_check)):
+        strong_meter = strong_meter + 1
+    if len(password_to_check) > 11:
+        strong_meter = strong_meter + 2
+    if strong_meter <= 1:
+        answer = colors["white_txt_bold"] + "EASY" + colors["white_txt"]
+    elif strong_meter in range(2, 4):
+        answer = colors["green_txt"] + "MEDIUM" + colors["white_txt"]
+    elif strong_meter == 4:
+        answer = colors["yellow_txt"] + "GOOD" + colors["white_txt"]
+    elif strong_meter == 5:
+        answer = colors["red_txt_black_bgr"] + "STRONG" + colors["white_txt"]
+    print("Your password is: " + answer + "\n")
 
 
 def password_encrypt():
@@ -50,20 +70,13 @@ def password_decrypt():
         password_decrypted += chr(value_of_char % 128)  # 128 cause of ascii
     print("Your decrypted password: {}{}{}".format(colors["yellow_txt"], password_decrypted, colors["white_txt"]))
 
-
-# def load_special_characters():
-#    for char in punctuation:
-#        sp_char_id[char] = ord(char)
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    # load_special_characters()
     print(colors["white_txt"])
     while True:
         show_menu()
         decision = int(input())
 
-        if decision in range(1, 5):
+        if decision in range(1, 6):
             if decision == 1:
                 password_strongmeter()
             if decision == 2:
@@ -72,6 +85,3 @@ if __name__ == '__main__':
                 password_decrypt()
             if decision == 4:
                 break
-            # if decision == 5:
-            #    for i in range(1, 26):
-            #        password_decrypt(password_encrypt("!@#asd123ASD*()", i), i)
